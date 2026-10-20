@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1F5F5B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kintsugi DAE">
+<meta name="description" content="Kintsugi Discovery Application Engine — GRC · AI Governance · Compliance-as-a-Service">
+<title>Kintsugi DAE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   KINTSUGI DAE — DESIGN SYSTEM
+   Palette: Teal (trust/institution) · Gold (repair/value)
+   Obsidian (depth) · Parchment (document/warmth) · Sakura
+═══════════════════════════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --teal:#1F5F5B; --teal-mid:#2E7D74; --teal-lt:#4A9E95; --teal-dk:#0D3B37;
+  --gold:#C9A84C; --gold-lt:#E8C97A; --gold-glow:#F5E0A0;
+  --obsidian:#0E0E0E; --charcoal:#1C1C1C; --surface:#242424; --surface2:#2E2E2E;
+  --parch:#F5EFE6; --parch-dk:#EDE3D5;
+  --sakura:#F2C4CE; --sakura-dk:#D4879A;
+  --slate:#94A3B8; --muted:#64748B;
+  --white:#FFFFFF; --text:#E8E4DE;
+  --red:#EF4444; --green:#22C55E; --amber:#F59E0B; --purple:#8B5CF6;
+  --r:0.75rem; --r-sm:0.5rem; --r-lg:1.25rem;
+  --shadow:0 4px 24px rgba(0,0,0,0.35);
+  --shadow-gold:0 0 20px rgba(201,168,76,0.18);
+  --font-serif:'Cormorant Garant',serif;
+  --font-sans:'DM Sans',system-ui,sans-serif;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bot:env(safe-area-inset-bottom,0px);
+}
+html{background:var(--obsidian);color:var(--text);font-family:var(--font-sans);height:100%;}
+body{min-height:100%;overflow-x:hidden;}
+button{cursor:pointer;font-family:var(--font-sans);border:none;outline:none;}
+input,textarea,select{font-family:var(--font-sans);outline:none;}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;width:100%;}
+.screen.active{display:flex;flex-direction:column;}
+
+/* ── TOP NAV ── */
+.app-nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:calc(var(--safe-top) + 0.7rem) 1.25rem 0.7rem;background:rgba(14,14,14,0.93);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,0.12);display:flex;align-items:center;justify-content:space-between;gap:0.75rem;}
+.nav-brand{font-family:var(--font-serif);font-size:1.1rem;color:var(--gold-lt);letter-spacing:0.04em;white-space:nowrap;}
+.nav-brand span{color:var(--gold);font-style:italic;}
+.nav-right{display:flex;align-items:center;gap:0.5rem;}
+.role-badge{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.22rem 0.6rem;border-radius:2rem;background:rgba(31,95,91,0.3);border:1px solid rgba(201,168,76,0.3);color:var(--gold-lt);white-space:nowrap;}
+.btn-icon{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid rgba(255,255,255,0.08);color:var(--slate);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.btn-icon:hover{background:var(--surface2);color:var(--text);}
+
+/* ── MOBILE TAB BAR ── */
+.tab-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;padding:0.45rem 0 calc(var(--safe-bot) + 0.45rem);background:rgba(14,14,14,0.96);backdrop-filter:blur(12px);border-top:1px solid rgba(201,168,76,0.1);display:flex;justify-content:space-around;align-items:flex-end;}
+.tab-item{display:flex;flex-direction:column;align-items:center;gap:0.18rem;padding:0.2rem 0.65rem;border:none;background:none;color:var(--muted);font-size:0.58rem;letter-spacing:0.04em;text-transform:uppercase;transition:color 0.2s;min-width:48px;}
+.tab-item .tab-icon{font-size:1.2rem;line-height:1;}
+.tab-item.active,.tab-item:hover{color:var(--gold);}
+
+/* ── MAIN CONTENT ── */
+.main-content{flex:1;padding:calc(var(--safe-top) + 58px) 0 calc(var(--safe-bot) + 66px);}
+.page{display:none;padding:1.25rem;}
+.page.active{display:block;}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:var(--r);padding:1.25rem;}
+.card-gold{background:linear-gradient(135deg,var(--teal-dk),#0A2A27);border:1px solid rgba(201,168,76,0.25);}
+
+/* ── TYPE SCALE ── */
+.display{font-family:var(--font-serif);font-size:clamp(1.8rem,5vw,3rem);font-weight:300;line-height:1.15;color:var(--text);}
+.display em{color:var(--gold);font-style:italic;}
+.heading{font-family:var(--font-serif);font-size:1.6rem;font-weight:400;color:var(--text);}
+.subheading{font-family:var(--font-serif);font-size:1.2rem;font-weight:400;color:var(--text);}
+.label{font-size:0.63rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+.caption{font-size:0.78rem;color:var(--slate);line-height:1.6;}
+.gold{color:var(--gold);}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.72rem 1.4rem;border-radius:var(--r-sm);font-size:0.84rem;font-weight:500;letter-spacing:0.02em;transition:all 0.22s;cursor:pointer;border:none;}
+.btn-primary{background:var(--teal);color:var(--white);border:1px solid var(--teal-mid);}
+.btn-primary:hover{background:var(--teal-mid);box-shadow:var(--shadow-gold);}
+.btn-gold{background:transparent;color:var(--gold);border:1px solid rgba(201,168,76,0.5);}
+.btn-gold:hover{background:rgba(201,168,76,0.08);border-color:var(--gold);}
+.btn-sm{padding:0.48rem 0.95rem;font-size:0.76rem;}
+.btn-full{width:100%;justify-content:center;}
+.btn:disabled{opacity:0.4;cursor:not-allowed;}
+
+/* ── FORMS ── */
+.form-group{display:flex;flex-direction:column;gap:0.35rem;margin-bottom:0.9rem;}
+.form-label{font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--gold);}
+.form-input{background:var(--surface2);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-sm);padding:0.72rem 0.95rem;color:var(--text);font-size:0.88rem;transition:border-color 0.2s;width:100%;}
+.form-input:focus{border-color:var(--teal-lt);}
+.form-input::placeholder{color:var(--muted);}
+.form-select{background:var(--surface2);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-sm);padding:0.72rem 0.95rem;color:var(--text);font-size:0.88rem;width:100%;}
+.form-textarea{background:var(--surface2);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-sm);padding:0.72rem 0.95rem;color:var(--text);font-size:0.88rem;width:100%;min-height:110px;resize:vertical;line-height:1.6;}
+.form-hint{font-size:0.7rem;color:var(--muted);}
+
+/* ── STATUS BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:0.3rem;padding:0.22rem 0.58rem;border-radius:2rem;font-size:0.65rem;font-weight:500;letter-spacing:0.04em;}
+.badge-draft{background:rgba(245,158,11,0.14);color:var(--amber);border:1px solid rgba(245,158,11,0.3);}
+.badge-approved{background:rgba(34,197,94,0.12);color:var(--green);border:1px solid rgba(34,197,94,0.25);}
+.badge-hitl{background:rgba(139,92,246,0.15);color:var(--purple);border:1px solid rgba(139,92,246,0.3);}
+.badge-active{background:rgba(31,95,91,0.3);color:var(--teal-lt);border:1px solid rgba(74,158,149,0.3);}
+.badge-warn{background:rgba(239,68,68,0.12);color:var(--red);border:1px solid rgba(239,68,68,0.25);}
+
+/* ── DIVIDERS ── */
+.gold-rule{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.1rem 0;opacity:0.35;}
+.rule{height:1px;background:rgba(255,255,255,0.07);margin:0.9rem 0;}
+
+/* ── MODULE GRID ── */
+.module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:0.7rem;}
+.module-card{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:var(--r);padding:1rem;display:flex;flex-direction:column;gap:0.45rem;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.module-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity 0.2s;}
+.module-card:hover{border-color:rgba(201,168,76,0.25);transform:translateY(-1px);}
+.module-card:hover::before{opacity:1;}
+.module-card.locked{opacity:0.38;cursor:not-allowed;}
+.module-icon{font-size:1.5rem;line-height:1;}
+.module-name{font-size:0.78rem;font-weight:500;color:var(--text);}
+.module-desc{font-size:0.66rem;color:var(--muted);line-height:1.4;}
+
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:0.7rem;}
+.stat-card{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:var(--r);padding:0.9rem;text-align:center;}
+.stat-num{font-family:var(--font-serif);font-size:1.9rem;font-weight:300;color:var(--gold);line-height:1;}
+.stat-label{font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-top:0.28rem;}
+
+/* ── LIST ITEMS ── */
+.list-item{display:flex;align-items:flex-start;gap:0.8rem;padding:0.85rem 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.list-item:last-child{border-bottom:none;}
+.list-avatar{width:36px;height:36px;border-radius:50%;background:var(--teal-dk);border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;}
+.list-body{flex:1;min-width:0;}
+.list-title{font-size:0.86rem;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.list-sub{font-size:0.7rem;color:var(--muted);margin-top:0.12rem;}
+.list-meta{font-size:0.66rem;color:var(--slate);text-align:right;white-space:nowrap;flex-shrink:0;}
+
+/* ── TABS ── */
+.tab-nav{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:1.1rem;overflow-x:auto;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-btn{flex-shrink:0;padding:0.6rem 0.95rem;font-size:0.76rem;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all 0.2s;letter-spacing:0.04em;white-space:nowrap;}
+.tab-btn.active,.tab-btn:hover{color:var(--gold);}
+.tab-btn.active{border-bottom-color:var(--gold);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* ── AI OUTPUT ── */
+.ai-output{background:var(--surface2);border:1px solid rgba(201,168,76,0.2);border-radius:var(--r);padding:1.1rem;min-height:100px;font-size:0.82rem;line-height:1.75;color:var(--text);white-space:pre-wrap;word-wrap:break-word;position:relative;}
+.ai-label{position:absolute;top:-9px;left:10px;background:var(--surface2);padding:0 0.4rem;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);}
+.typing-cursor{display:inline-block;width:2px;height:0.9em;background:var(--gold);animation:blink 0.8s infinite;vertical-align:text-bottom;margin-left:1px;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* ── ALERTS ── */
+.alert{padding:0.8rem 0.95rem;border-radius:var(--r-sm);font-size:0.8rem;line-height:1.5;display:flex;gap:0.6rem;align-items:flex-start;}
+.alert-info{background:rgba(31,95,91,0.2);border:1px solid rgba(74,158,149,0.25);color:var(--teal-lt);}
+.alert-warn{background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);color:var(--amber);}
+.alert-success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:var(--green);}
+.alert-hitl{background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.25);color:var(--purple);}
+
+/* ── HITL ITEMS ── */
+.hitl-item{background:var(--surface);border:1px solid rgba(139,92,246,0.2);border-radius:var(--r);padding:1rem;margin-bottom:0.7rem;}
+.hitl-header{display:flex;align-items:flex-start;justify-content:space-between;gap:0.7rem;margin-bottom:0.7rem;}
+.hitl-title{font-size:0.86rem;font-weight:500;color:var(--text);}
+.hitl-meta{font-size:0.68rem;color:var(--muted);margin-top:0.12rem;}
+.hitl-actions{display:flex;gap:0.45rem;flex-wrap:wrap;}
+.btn-approve{background:rgba(34,197,94,0.12);color:var(--green);border:1px solid rgba(34,197,94,0.3);border-radius:var(--r-sm);padding:0.42rem 0.85rem;font-size:0.73rem;cursor:pointer;transition:all 0.2s;}
+.btn-approve:hover{background:rgba(34,197,94,0.2);}
+.btn-revise{background:rgba(245,158,11,0.1);color:var(--amber);border:1px solid rgba(245,158,11,0.25);border-radius:var(--r-sm);padding:0.42rem 0.85rem;font-size:0.73rem;cursor:pointer;}
+.btn-reject{background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.25);border-radius:var(--r-sm);padding:0.42rem 0.85rem;font-size:0.73rem;cursor:pointer;}
+
+/* ── VAULT ── */
+.vault-item{display:flex;align-items:center;gap:0.7rem;padding:0.72rem;background:var(--surface);border:1px solid rgba(255,255,255,0.05);border-radius:var(--r-sm);margin-bottom:0.45rem;cursor:pointer;transition:border-color 0.2s;}
+.vault-item:hover{border-color:rgba(201,168,76,0.2);}
+.vault-icon{font-size:1.3rem;flex-shrink:0;}
+.vault-name{font-size:0.8rem;font-weight:500;color:var(--text);}
+.vault-meta{font-size:0.66rem;color:var(--muted);margin-top:0.08rem;}
+.vault-status{margin-left:auto;flex-shrink:0;}
+
+/* ── CALENDAR ── */
+.cal-item{display:flex;align-items:center;gap:0.8rem;padding:0.8rem 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.cal-date{text-align:center;min-width:42px;}
+.cal-day{font-family:var(--font-serif);font-size:1.4rem;font-weight:300;line-height:1;color:var(--gold);}
+.cal-month{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+.cal-body{flex:1;}
+.cal-title{font-size:0.83rem;font-weight:500;color:var(--text);}
+.cal-type{font-size:0.66rem;color:var(--muted);margin-top:0.08rem;}
+.cal-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot-high{background:var(--red);}
+.dot-med{background:var(--amber);}
+.dot-low{background:var(--green);}
+
+/* ── SPINNER / LOADING ── */
+.spinner{width:20px;height:20px;border:2px solid rgba(201,168,76,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-overlay{position:fixed;inset:0;background:rgba(14,14,14,0.82);backdrop-filter:blur(4px);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;}
+
+/* ── TOAST ── */
+.toast-container{position:fixed;top:calc(var(--safe-top) + 68px);left:50%;transform:translateX(-50%);z-index:600;display:flex;flex-direction:column;gap:0.45rem;align-items:center;pointer-events:none;width:92%;max-width:340px;}
+.toast{padding:0.72rem 1rem;border-radius:var(--r);font-size:0.8rem;color:var(--white);animation:toastIn 0.22s ease;pointer-events:all;text-align:center;line-height:1.4;}
+.toast-success{background:rgba(22,101,52,0.96);border:1px solid rgba(34,197,94,0.3);}
+.toast-error{background:rgba(127,29,29,0.96);border:1px solid rgba(239,68,68,0.3);}
+.toast-info{background:rgba(13,59,55,0.96);border:1px solid rgba(31,95,91,0.5);}
+@keyframes toastIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(4px);z-index:400;display:none;align-items:flex-end;justify-content:center;}
+@media(min-width:600px){.modal-overlay{align-items:center;}}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--charcoal);border:1px solid rgba(201,168,76,0.15);border-radius:var(--r-lg) var(--r-lg) 0 0;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;padding:1.5rem;}
+@media(min-width:600px){.modal{border-radius:var(--r-lg);}}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.15rem;}
+.modal-title{font-family:var(--font-serif);font-size:1.2rem;color:var(--text);}
+
+/* ── DESKTOP SIDEBAR ── */
+.sidebar{display:none;}
+@media(min-width:768px){
+  .tab-bar{display:none;}
+  .sidebar{display:flex;flex-direction:column;width:210px;background:var(--charcoal);border-right:1px solid rgba(255,255,255,0.05);padding:0.85rem 0;gap:0.2rem;position:fixed;left:0;top:58px;bottom:0;overflow-y:auto;}
+  .sidebar-item{display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1.15rem;font-size:0.8rem;color:var(--muted);cursor:pointer;transition:all 0.18s;border-left:2px solid transparent;white-space:nowrap;}
+  .sidebar-item:hover{background:rgba(255,255,255,0.03);color:var(--text);}
+  .sidebar-item.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,168,76,0.05);}
+  .sidebar-icon{font-size:0.95rem;width:18px;text-align:center;flex-shrink:0;}
+  .with-sidebar .main-content{padding-left:210px;}
+  .main-content{padding-top:calc(var(--safe-top) + 62px);padding-bottom:1.5rem;}
+  .page{padding:1.6rem 1.85rem;}
+  .stats-row{grid-template-columns:repeat(4,1fr);}
+  .module-grid{grid-template-columns:repeat(auto-fill,minmax(175px,1fr));}
+}
+
+/* ── LANDING/MARKETING ── */
+#screen-landing .main-content{padding:0;}
+.hero-wrap{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;padding:5rem 1.5rem 7rem;overflow:hidden;}
+canvas#hero-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:0.52;}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:700px;}
+.hero-eyebrow{font-size:0.63rem;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-bottom:1.4rem;}
+.hero-title{font-family:var(--font-serif);font-size:clamp(2.5rem,7vw,5rem);font-weight:300;line-height:1.1;color:var(--text);margin-bottom:1.2rem;}
+.hero-title em{color:var(--gold);font-style:italic;}
+.hero-divider{width:44px;height:1px;background:var(--gold);margin:1.4rem auto;opacity:0.45;}
+.hero-sub{font-size:0.97rem;color:var(--slate);line-height:1.78;max-width:460px;margin:0 auto 0.7rem;}
+.hero-tagline{font-size:0.67rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:2.3rem;}
+.hero-btns{display:flex;gap:0.7rem;justify-content:center;flex-wrap:wrap;}
+.btn-hero{padding:0.82rem 1.9rem;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;border-radius:3px;transition:all 0.25s;cursor:pointer;font-family:var(--font-sans);}
+.btn-hero-primary{background:transparent;border:1px solid var(--gold);color:var(--gold);}
+.btn-hero-primary:hover{background:var(--gold);color:var(--obsidian);}
+.btn-hero-ghost{background:transparent;border:1px solid rgba(148,163,184,0.22);color:var(--slate);}
+.btn-hero-ghost:hover{border-color:var(--slate);color:var(--text);}
+.services{padding:4.5rem 1.5rem;background:var(--charcoal);border-top:1px solid rgba(201,168,76,0.1);}
+.services-inner{max-width:860px;margin:2.2rem auto 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:rgba(201,168,76,0.1);}
+.service-card{background:var(--charcoal);padding:1.65rem;position:relative;}
+.service-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity 0.3s;}
+.service-card:hover::after{opacity:1;}
+.service-glyph{font-size:1.9rem;margin-bottom:0.9rem;}
+.service-name{font-family:var(--font-serif);font-size:1.1rem;color:var(--text);margin-bottom:0.45rem;}
+.service-desc{font-size:0.78rem;color:var(--muted);line-height:1.68;}
+.cta-section{padding:4.5rem 1.5rem;text-align:center;background:var(--obsidian);}
+.cta-title{font-family:var(--font-serif);font-size:clamp(1.9rem,5vw,3.2rem);font-weight:300;color:var(--text);line-height:1.2;margin-bottom:0.9rem;}
+.cta-sub{font-size:0.88rem;color:var(--muted);max-width:400px;margin:0 auto 1.85rem;line-height:1.7;}
+
+/* ── LOGIN ── */
+#screen-login{background:var(--obsidian);align-items:center;justify-content:center;padding:1.5rem;}
+.login-box{background:var(--charcoal);border:1px solid rgba(201,168,76,0.15);border-radius:var(--r-lg);padding:1.85rem;width:100%;max-width:370px;box-shadow:var(--shadow);}
+.login-logo{text-align:center;margin-bottom:1.6rem;}
+.login-wordmark{font-family:var(--font-serif);font-size:1.35rem;color:var(--gold-lt);letter-spacing:0.04em;}
+.login-tagline{font-size:0.65rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-top:0.22rem;}
+.mfa-digits{display:flex;gap:0.45rem;justify-content:center;margin:0.45rem 0 0.9rem;}
+.mfa-digit{width:42px;height:50px;background:var(--surface);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r-sm);text-align:center;font-size:1.35rem;font-weight:600;color:var(--text);caret-color:var(--gold);}
+.mfa-digit:focus{border-color:var(--teal-lt);}
+
+/* ── DASHBOARD ── */
+.dash-greeting{font-family:var(--font-serif);font-size:1.45rem;font-weight:300;color:var(--text);}
+.dash-greeting span{color:var(--gold);}
+.dash-date{font-size:0.7rem;color:var(--muted);margin-top:0.18rem;}
+</style>
+<!-- ═══════ TOAST + LOADING ═══════ -->
+<div class="toast-container" id="toasts"></div>
+<div class="loading-overlay" id="loading" style="display:none;">
+  <div class="spinner" style="width:34px;height:34px;border-width:3px;"></div>
+  <p style="font-size:0.8rem;color:var(--slate);" id="loading-msg">Processing...</p>
+</div>
+
+<!-- ═══════ SCREEN: LANDING ═══════ -->
+<div class="screen active" id="screen-landing">
+  <div class="main-content">
+    <div class="hero-wrap">
+      <canvas id="hero-canvas"></canvas>
+      <div class="hero-content">
+        <p class="hero-eyebrow">Kintsugi Consulting &amp; Logistics LLC</p>
+        <h1 class="hero-title">Where <em>fractures</em><br>become <em>gold.</em></h1>
+        <div class="hero-divider"></div>
+        <p class="hero-sub">Institutional GRC &middot; Responsible AI &middot; Governance-as-a-Service. We mend fractured processes into unified, audit-ready systems.</p>
+        <p class="hero-tagline">Strategic Resilience &middot; Adaptive Continuity</p>
+        <div class="hero-btns">
+          <button class="btn-hero btn-hero-primary" onclick="showScreen('login')">Access Platform</button>
+          <button class="btn-hero btn-hero-ghost" onclick="guestDemo()">Request Demo</button>
+        </div>
+      </div>
+    </div>
+    <section class="services">
+      <div style="max-width:860px;margin:0 auto;text-align:center;">
+        <p class="label">What We Build</p>
+        <h2 style="font-family:var(--font-serif);font-size:1.85rem;font-weight:300;color:var(--text);margin-top:0.45rem;">Six pillars. One governed platform.</h2>
+      </div>
+      <div class="services-inner">
+        <div class="service-card"><div class="service-glyph">📄</div><div class="service-name">Business Documents</div><p class="service-desc">AI-assisted, HITL-verified creation of operating agreements, MSAs, capability statements, and board reports.</p></div>
+        <div class="service-card"><div class="service-glyph">📊</div><div class="service-name">Tax Strategy</div><p class="service-desc">Entity-specific quarterly tax planning, ORR allocation, and DBA/LLC structure optimization.</p></div>
+        <div class="service-card"><div class="service-glyph">💰</div><div class="service-name">Business Funding</div><p class="service-desc">SBA, NMSDC, CDFI, and angel pathways &mdash; from eligibility through application, with compliance gates.</p></div>
+        <div class="service-card"><div class="service-glyph">🏛️</div><div class="service-name">Gov Procurement</div><p class="service-desc">SAM.gov, NAICS strategy, set-aside eligibility, and capability statement alignment to federal solicitations.</p></div>
+        <div class="service-card"><div class="service-glyph">🛡️</div><div class="service-name">CaaS</div><p class="service-desc">Continuous compliance monitoring &mdash; regulatory mapping, drift detection, and pre-audit readiness packaging.</p></div>
+        <div class="service-card"><div class="service-glyph">⚙️</div><div class="service-name">GaaS</div><p class="service-desc">Governance-as-a-Service &mdash; RACI management, RCSA automation, policy lifecycle, and vendor risk tracking.</p></div>
+      </div>
+    </section>
+    <section class="cta-section">
+      <p class="label" style="margin-bottom:0.9rem;">Begin Your Engagement</p>
+      <h2 class="cta-title">Every institution<br>has <em class="gold">fractures.</em><br>Few have gold.</h2>
+      <p class="cta-sub">Schedule a Fracture Analysis. We assess your governance posture and deliver a written Gap Report within five business days.</p>
+      <div style="display:flex;gap:0.7rem;justify-content:center;flex-wrap:wrap;">
+        <button class="btn-hero btn-hero-primary" onclick="showScreen('login')">Access Platform</button>
+        <button class="btn-hero btn-hero-ghost" onclick="window.location='mailto:shiloh@kintsugi-logistics.com'">shiloh@kintsugi-logistics.com</button>
+      </div>
+      <p style="margin-top:1.85rem;font-size:0.7rem;color:var(--muted);letter-spacing:0.07em;">317-938-7917 &middot; Ohio &middot; Indiana &middot; National &middot; www.kintsugi-logistics.com</p>
+    </section>
+  </div>
+</div>
+
+<!-- ═══════ SCREEN: LOGIN ═══════ -->
+<div class="screen" id="screen-login">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-wordmark">Kintsugi DAE</div>
+      <div class="login-tagline">Discovery Application Engine</div>
+    </div>
+    <div class="gold-rule"></div>
+    <div id="login-step1">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="login-email" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="login-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="current-password" onkeydown="if(event.key==='Enter')handleLogin()">
+      </div>
+      <button class="btn btn-primary btn-full" onclick="handleLogin()">Sign In</button>
+      <p class="caption" style="text-align:center;margin-top:0.9rem;">
+        <span style="color:var(--muted);">New client? </span>
+        <span style="color:var(--gold);cursor:pointer;" onclick="showToast('Contact your Administrator to provision your account.','info')">Request access</span>
+      </p>
+      <div class="alert alert-info" style="margin-top:1rem;font-size:0.74rem;">
+        Demo logins &mdash; any password works:<br>
+        <strong>Principal:</strong> shiloh@kintsugi-logistics.com<br>
+        <strong>Admin:</strong> admin@kintsugi-logistics.com<br>
+        <strong>Client:</strong> client@example.com
+      </div>
+    </div>
+    <div id="login-step2" style="display:none;">
+      <p class="caption" style="text-align:center;margin-bottom:0.9rem;">Enter the 6-digit code from your authenticator app.</p>
+      <div class="mfa-digits">
+        <input type="tel" class="mfa-digit" maxlength="1" id="mfa0" oninput="mfaNav(0)" autocomplete="one-time-code">
+        <input type="tel" class="mfa-digit" maxlength="1" id="mfa1" oninput="mfaNav(1)">
+        <input type="tel" class="mfa-digit" maxlength="1" id="mfa2" oninput="mfaNav(2)">
+        <input type="tel" class="mfa-digit" maxlength="1" id="mfa3" oninput="mfaNav(3)">
+        <input type="tel" class="mfa-digit" maxlength="1" id="mfa4" oninput="mfaNav(4)">
+        <input type="tel" class="mfa-digit" maxlength="1" id="mfa5" oninput="mfaNav(5)">
+      </div>
+      <button class="btn btn-primary btn-full" onclick="verifyMFA()">Verify &amp; Enter</button>
+      <p class="caption" style="text-align:center;margin-top:0.7rem;color:var(--muted);font-size:0.68rem;">Demo: enter any 6 digits to continue</p>
+    </div>
+    <div class="gold-rule"></div>
+    <p class="caption" style="text-align:center;"><span style="cursor:pointer;color:var(--muted);" onclick="showScreen('landing')">&larr; Return to site</span></p>
+  </div>
+</div>
+
+<!-- ═══════ SCREEN: APP ═══════ -->
+<div class="screen with-sidebar" id="screen-app">
+  <nav class="app-nav">
+    <div class="nav-brand">Kintsugi <span>DAE</span></div>
+    <div class="nav-right">
+      <span class="role-badge" id="nav-role-badge">Loading</span>
+      <button class="btn-icon" onclick="notifClick()" title="Notifications" id="btn-notif">🔔</button>
+      <button class="btn-icon" onclick="doLogout()" title="Sign out">⏻</button>
+    </div>
+  </nav>
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main-content" id="app-main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="dash-greeting" id="dash-greeting">Good morning, <span id="dash-name">Shiloh</span>.</div>
+      <div class="dash-date" id="dash-date" style="margin-bottom:1.1rem;"></div>
+      <div class="stats-row" id="dash-stats" style="margin-bottom:1.1rem;"></div>
+      <div id="hitl-alert-wrap"></div>
+      <p class="label" style="margin-bottom:0.7rem;">Your Modules</p>
+      <div class="module-grid" id="dash-modules" style="margin-bottom:1.25rem;"></div>
+      <p class="label" style="margin-bottom:0.7rem;">Recent Activity</p>
+      <div class="card" id="recent-activity"></div>
+    </div>
+
+    <!-- MODULES -->
+    <div class="page" id="page-modules">
+      <p class="label" style="margin-bottom:0.4rem;">All Modules</p>
+      <p class="caption" style="margin-bottom:1.1rem;">Select a module to begin a workflow. Locked modules require MSA amendment.</p>
+      <div class="module-grid" id="all-modules"></div>
+    </div>
+
+    <!-- WORKSPACE -->
+    <div class="page" id="page-workspace">
+      <div id="workspace-content"></div>
+    </div>
+
+    <!-- HITL QUEUE -->
+    <div class="page" id="page-hitl">
+      <p class="label" style="margin-bottom:0.4rem;">HITL Review Queue</p>
+      <p class="caption" style="margin-bottom:1.1rem;">Human-in-the-Loop verification. Review AI-generated outputs before they are finalized, distributed, or filed.</p>
+      <div id="hitl-queue-list"></div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div class="page" id="page-clients">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;">
+        <p class="label">Client Engagements</p>
+        <button class="btn btn-gold btn-sm" onclick="openModal('modal-new-client')">+ New Client</button>
+      </div>
+      <div id="client-list"></div>
+    </div>
+
+    <!-- VAULT -->
+    <div class="page" id="page-vault">
+      <p class="label" style="margin-bottom:0.4rem;">Evidence Vault</p>
+      <p class="caption" style="margin-bottom:1rem;">Your secure document repository. All files are encrypted and access-controlled.</p>
+      <div class="tab-nav" id="vault-tabs">
+        <button class="tab-btn active" onclick="switchVaultTab('docs',this)">Documents</button>
+        <button class="tab-btn" onclick="switchVaultTab('gov',this)">Governance</button>
+        <button class="tab-btn" onclick="switchVaultTab('client',this)">Client Files</button>
+      </div>
+      <div id="vault-docs" class="tab-content active"></div>
+      <div id="vault-gov" class="tab-content"></div>
+      <div id="vault-client" class="tab-content"></div>
+      <div style="margin-top:1.1rem;">
+        <label class="btn btn-gold btn-sm" style="display:inline-flex;align-items:center;gap:0.45rem;cursor:pointer;">
+          📎 Upload File <input type="file" style="display:none;" onchange="handleVaultUpload(this)">
+        </label>
+      </div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="page" id="page-calendar">
+      <p class="label" style="margin-bottom:0.4rem;">Compliance Calendar</p>
+      <p class="caption" style="margin-bottom:1.1rem;">Regulatory deadlines, Integrity Gate checkpoints, and review cycle milestones.</p>
+      <div id="cal-list"></div>
+    </div>
+
+    <!-- TEAM -->
+    <div class="page" id="page-team">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;">
+        <p class="label">Team Management</p>
+        <button class="btn btn-gold btn-sm" onclick="openModal('modal-add-member')">+ Add Member</button>
+      </div>
+      <div id="team-list"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <p class="label" style="margin-bottom:1.1rem;">Platform Settings</p>
+      <div class="card" style="margin-bottom:0.7rem;">
+        <p style="font-family:var(--font-serif);font-size:1rem;color:var(--text);margin-bottom:0.85rem;">Organization</p>
+        <div class="form-group"><label class="form-label">Firm Name</label><input class="form-input" value="Kintsugi Consulting &amp; Logistics LLC" readonly></div>
+        <div class="form-group"><label class="form-label">EIN</label><input class="form-input" value="42-2286831" readonly></div>
+        <div class="form-group"><label class="form-label">Primary Email</label><input class="form-input" id="set-email" value="shiloh@kintsugi-logistics.com"></div>
+        <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="set-phone" value="317-938-7917"></div>
+        <button class="btn btn-primary btn-sm" onclick="showToast('Settings saved.','success')">Save Changes</button>
+      </div>
+      <div class="card">
+        <p style="font-family:var(--font-serif);font-size:1rem;color:var(--text);margin-bottom:0.85rem;">AI Engine — Claude API</p>
+        <div class="form-group">
+          <label class="form-label">Anthropic API Key</label>
+          <input class="form-input" type="password" id="api-key-input" placeholder="sk-ant-api03-...">
+        </div>
+        <p class="form-hint" style="margin-bottom:0.75rem;">Get your key at console.anthropic.com &middot; Stored locally in your browser only. Never sent to any third party except Anthropic's API.</p>
+        <button class="btn btn-primary btn-sm" onclick="saveApiKey()">Save API Key</button>
+        <div id="api-key-status" style="margin-top:0.7rem;"></div>
+      </div>
+    </div>
+
+    <!-- DEMO PAGE -->
+    <div class="page" id="page-demo">
+      <div class="card-gold" style="padding:1.65rem;border-radius:var(--r);margin-bottom:1.1rem;text-align:center;border:1px solid rgba(201,168,76,0.3);">
+        <p class="label" style="margin-bottom:0.7rem;">Demo Session Active</p>
+        <h2 style="font-family:var(--font-serif);font-size:1.7rem;font-weight:300;color:var(--text);margin-bottom:0.45rem;">Welcome to <em class="gold">Kintsugi DAE</em></h2>
+        <p class="caption" style="max-width:340px;margin:0 auto 1.1rem;">You are in the demonstration environment. No live client data. All outputs are samples only.</p>
+        <span class="badge badge-active">&#9203; Session: 2:00:00 remaining</span>
+      </div>
+      <p class="label" style="margin-bottom:0.7rem;">Explore These Modules</p>
+      <div class="module-grid">
+        <div class="module-card" onclick="openModule('docs')"><div class="module-icon">📄</div><div class="module-name">Document Creation</div><div class="module-desc">See AI-assisted generation in action</div></div>
+        <div class="module-card" onclick="openModule('tax')"><div class="module-icon">📊</div><div class="module-name">Tax Strategy</div><div class="module-desc">Sample quarterly tax workflow</div></div>
+        <div class="module-card" onclick="openModule('caas')"><div class="module-icon">🛡️</div><div class="module-name">CaaS Overview</div><div class="module-desc">Compliance monitoring demo</div></div>
+        <div class="module-card" onclick="openModule('gaas')"><div class="module-icon">⚙️</div><div class="module-name">GaaS Overview</div><div class="module-desc">Governance-as-a-service demo</div></div>
+      </div>
+      <div style="margin-top:1.35rem;">
+        <button class="btn btn-primary" onclick="window.location='mailto:shiloh@kintsugi-logistics.com?subject=Following+up+on+Demo'">Schedule Follow-Up &rarr;</button>
+      </div>
+    </div>
+
+  </div><!-- /app-main -->
+  <nav class="tab-bar" id="tab-bar"></nav>
+</div><!-- /screen-app -->
+
+<!-- ═══════ MODALS ═══════ -->
+
+<!-- New Client -->
+<div class="modal-overlay" id="modal-new-client">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">New Client Engagement</h3>
+      <button class="btn-icon" onclick="closeModal('modal-new-client')">&#10005;</button>
+    </div>
+    <div class="form-group"><label class="form-label">Organization / Client Name *</label><input class="form-input" id="nc-name" placeholder="Acme Corp LLC"></div>
+    <div class="form-group"><label class="form-label">Primary Contact *</label><input class="form-input" id="nc-contact" placeholder="Jane Smith"></div>
+    <div class="form-group"><label class="form-label">Email *</label><input class="form-input" type="email" id="nc-email" placeholder="jane@acme.com"></div>
+    <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="nc-phone" placeholder="555-000-0000"></div>
+    <div class="form-group"><label class="form-label">Entity Type</label>
+      <select class="form-select" id="nc-entity"><option>LLC</option><option>S-Corp</option><option>C-Corp</option><option>Sole Proprietor</option><option>Non-Profit</option><option>Partnership</option></select>
+    </div>
+    <div class="form-group"><label class="form-label">State of Operation</label>
+      <select class="form-select" id="nc-state"><option>Ohio</option><option>Indiana</option><option>Kentucky</option><option>Michigan</option><option>National</option></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Module Scope</label>
+      <div style="display:flex;flex-direction:column;gap:0.35rem;margin-top:0.2rem;">
+        <label style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;color:var(--slate);cursor:pointer;"><input type="checkbox" id="scope-docs" checked style="accent-color:var(--teal);"> Business Document Creation</label>
+        <label style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;color:var(--slate);cursor:pointer;"><input type="checkbox" id="scope-tax" style="accent-color:var(--teal);"> Tax Strategy</label>
+        <label style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;color:var(--slate);cursor:pointer;"><input type="checkbox" id="scope-fund" style="accent-color:var(--teal);"> Business Funding</label>
+        <label style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;color:var(--slate);cursor:pointer;"><input type="checkbox" id="scope-proc" style="accent-color:var(--teal);"> Government Procurement</label>
+        <label style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;color:var(--slate);cursor:pointer;"><input type="checkbox" id="scope-caas" style="accent-color:var(--teal);"> CaaS</label>
+        <label style="display:flex;align-items:center;gap:0.45rem;font-size:0.8rem;color:var(--slate);cursor:pointer;"><input type="checkbox" id="scope-gaas" style="accent-color:var(--teal);"> GaaS</label>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="createClient()">Create Engagement &amp; Send Invite</button>
+  </div>
+</div>
+
+<!-- Add Member -->
+<div class="modal-overlay" id="modal-add-member">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Add Team Member</h3>
+      <button class="btn-icon" onclick="closeModal('modal-add-member')">&#10005;</button>
+    </div>
+    <div class="form-group"><label class="form-label">Full Legal Name *</label><input class="form-input" id="am-name" placeholder="First Last"></div>
+    <div class="form-group"><label class="form-label">Work Email *</label><input class="form-input" type="email" id="am-email" placeholder="name@email.com"></div>
+    <div class="form-group"><label class="form-label">Role *</label>
+      <select class="form-select" id="am-role">
+        <option value="managing_member">Managing Member</option>
+        <option value="admin">Administrator</option>
+        <option value="client">Client</option>
+        <option value="guest">Guest (Demo)</option>
+      </select>
+    </div>
+    <div class="alert alert-warn" style="margin-bottom:0.9rem;font-size:0.76rem;">Managing Member accounts require a named individual in the executed Operating Agreement before access is provisioned.</div>
+    <button class="btn btn-primary btn-full" onclick="addMember()">Send Invitation</button>
+  </div>
+</div>
+
+<!-- HITL Decision -->
+<div class="modal-overlay" id="modal-hitl">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">HITL Review</h3>
+      <button class="btn-icon" onclick="closeModal('modal-hitl')">&#10005;</button>
+    </div>
+    <span class="badge badge-hitl" style="margin-bottom:0.9rem;display:inline-flex;" id="hitl-modal-badge">Pending Review</span>
+    <p class="label" style="margin-bottom:0.45rem;">AI-Generated Output (DRAFT)</p>
+    <div class="ai-output" id="hitl-modal-output" style="max-height:190px;overflow-y:auto;font-size:0.78rem;"></div>
+    <div style="height:0.85rem;"></div>
+    <div class="form-group"><label class="form-label">Review Notes</label><textarea class="form-textarea" id="hitl-notes" placeholder="Enter approval rationale, correction notes, or rejection reason..." style="min-height:72px;"></textarea></div>
+    <div class="hitl-actions" style="justify-content:flex-end;">
+      <button class="btn-reject" onclick="hitlDecision('reject')">&#10007; Reject</button>
+      <button class="btn-revise" onclick="hitlDecision('revise')">&#8635; Revise</button>
+      <button class="btn-approve" onclick="hitlDecision('approve')">&#10003; Approve</button>
+    </div>
+  </div>
+</div>
+
+<!-- Click outside modal to close -->
+<script>document.addEventListener('click',e=>{if(e.target.classList.contains('modal-overlay'))e.target.classList.remove('open');});</script>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// KINTSUGI DAE — APPLICATION ENGINE v1.0
+// Discovery Application Engine · Shiloh Shaeed El · July 2026
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+const S = {
+  screen:'landing', page:'dashboard', user:null,
+  apiKey: localStorage.getItem('kae_api_key')||'',
+  clients: JSON.parse(localStorage.getItem('kae_clients')||'[]'),
+  team:    JSON.parse(localStorage.getItem('kae_team')||'[]'),
+  vault:   JSON.parse(localStorage.getItem('kae_vault')||'[]'),
+  hitlQ:   JSON.parse(localStorage.getItem('kae_hitl')||'[]'),
+  curHITL: null, curModule: null, lastAIOut:'',
+};
+
+// ── DEMO USERS ────────────────────────────────────────────────────────────────
+const USERS = {
+  'shiloh@kintsugi-logistics.com': {name:'Shiloh Shaeed El',  role:'principal',       title:'Founder & Principal Consultant'},
+  'managing@kintsugi-logistics.com':{name:'Managing Member',  role:'managing_member', title:'Managing Member'},
+  'admin@kintsugi-logistics.com':  {name:'Admin User',        role:'admin',           title:'Administrator'},
+  'client@example.com':            {name:'Client User',       role:'client',          title:'Client'},
+  'guest@demo.com':                {name:'Demo Guest',        role:'guest',           title:'Guest (Demo)'},
+};
+
+// ── ROLE CONFIG ───────────────────────────────────────────────────────────────
+const RC = {
+  principal:{
+    label:'Principal Initiator',
+    sidebar:[{i:'🏠',l:'Dashboard',p:'dashboard'},{i:'🔲',l:'Modules',p:'modules'},{i:'⚖️',l:'HITL Queue',p:'hitl'},{i:'👥',l:'Clients',p:'clients'},{i:'🗄️',l:'Vault',p:'vault'},{i:'📅',l:'Calendar',p:'calendar'},{i:'👤',l:'Team',p:'team'},{i:'⚙️',l:'Settings',p:'settings'}],
+    tabs:[{i:'🏠',l:'Home',p:'dashboard'},{i:'🔲',l:'Modules',p:'modules'},{i:'⚖️',l:'HITL',p:'hitl'},{i:'👥',l:'Clients',p:'clients'},{i:'⚙️',l:'Settings',p:'settings'}],
+    stats:[{n:'6',l:'Active Modules'},{n:'0',l:'HITL Pending',id:'s-hitl'},{n:'0',l:'Clients',id:'s-cli'},{n:'100%',l:'Audit Ready'}],
+    mods:['docs','tax','funding','procurement','caas','gaas'],
+  },
+  managing_member:{
+    label:'Managing Member',
+    sidebar:[{i:'🏠',l:'Dashboard',p:'dashboard'},{i:'🔲',l:'Modules',p:'modules'},{i:'⚖️',l:'HITL Queue',p:'hitl'},{i:'👥',l:'Clients',p:'clients'},{i:'🗄️',l:'Vault',p:'vault'},{i:'📅',l:'Calendar',p:'calendar'},{i:'👤',l:'Team',p:'team'}],
+    tabs:[{i:'🏠',l:'Home',p:'dashboard'},{i:'🔲',l:'Modules',p:'modules'},{i:'⚖️',l:'HITL',p:'hitl'},{i:'👥',l:'Clients',p:'clients'},{i:'👤',l:'Team',p:'team'}],
+    stats:[{n:'6',l:'Modules'},{n:'0',l:'HITL Pending',id:'s-hitl'},{n:'0',l:'Clients',id:'s-cli'},{n:'Active',l:'Status'}],
+    mods:['docs','tax','funding','procurement','caas','gaas'],
+  },
+  admin:{
+    label:'Administrator',
+    sidebar:[{i:'🏠',l:'Dashboard',p:'dashboard'},{i:'🔲',l:'Modules',p:'modules'},{i:'⚖️',l:'HITL Queue',p:'hitl'},{i:'👥',l:'Clients',p:'clients'},{i:'🗄️',l:'Vault',p:'vault'},{i:'📅',l:'Calendar',p:'calendar'}],
+    tabs:[{i:'🏠',l:'Home',p:'dashboard'},{i:'🔲',l:'Modules',p:'modules'},{i:'⚖️',l:'HITL',p:'hitl'},{i:'👥',l:'Clients',p:'clients'},{i:'📅',l:'Cal',p:'calendar'}],
+    stats:[{n:'0',l:'Active Clients',id:'s-cli'},{n:'0',l:'HITL Pending',id:'s-hitl'},{n:'0',l:'Docs Generated'},{n:'Active',l:'Status'}],
+    mods:['docs','tax','funding','procurement','caas','gaas'],
+  },
+  client:{
+    label:'Client',
+    sidebar:[{i:'🏠',l:'Dashboard',p:'dashboard'},{i:'🔲',l:'Modules',p:'modules'},{i:'🗄️',l:'My Vault',p:'vault'},{i:'📅',l:'Calendar',p:'calendar'}],
+    tabs:[{i:'🏠',l:'Home',p:'dashboard'},{i:'🔲',l:'Modules',p:'modules'},{i:'🗄️',l:'Vault',p:'vault'},{i:'📅',l:'Calendar',p:'calendar'}],
+    stats:[{n:'3',l:'Active Modules'},{n:'0',l:'Docs Ready'},{n:'2',l:'Pending'},{n:'On Track',l:'Engagement'}],
+    mods:['docs','tax','funding'],
+  },
+  guest:{
+    label:'Guest (Demo)',
+    sidebar:[{i:'🎯',l:'Demo Environment',p:'demo'}],
+    tabs:[{i:'🎯',l:'Demo',p:'demo'}],
+    stats:[{n:'DEMO',l:'Environment'},{n:'4',l:'Modules'},{n:'2hr',l:'Session'},{n:'Safe',l:'No Live Data'}],
+    mods:[],
+  },
+};
+
+// ── MODULE DEFINITIONS ────────────────────────────────────────────────────────
+const MODS = {
+  docs:        {icon:'📄',name:'Business Documents',  desc:'AI-assisted document creation with HITL verification'},
+  tax:         {icon:'📊',name:'Tax Strategy',         desc:'Quarterly planning, ORR allocation, structure optimization'},
+  funding:     {icon:'💰',name:'Business Funding',     desc:'SBA, NMSDC, CDFI, and angel access pathways'},
+  procurement: {icon:'🏛️',name:'Gov Procurement',      desc:'SAM.gov, NAICS strategy, capability statements'},
+  caas:        {icon:'🛡️',name:'CaaS',                 desc:'Continuous compliance monitoring and drift detection'},
+  gaas:        {icon:'⚙️',name:'GaaS',                 desc:'RACI, RCSA, policy lifecycle, vendor risk'},
+};
+
+const WORKFLOWS = {
+  docs:        ['Operating Agreement','Capability Statement','Master Services Agreement (MSA)','Non-Disclosure Agreement (NDA)','Business Readiness Review Checklist','Executive Summary Deck Brief'],
+  tax:         ['Quarterly Tax Estimate (EQ)','ORR Allocation Plan','LLC/DBA Structure Review','IRS EIN Alignment Check','State Filing Strategy — Ohio/Indiana'],
+  funding:     ['SBA Loan Eligibility Assessment','NMSDC Certification Funding Pathway','CDFI Access Pathway','Business Credit Profile','Angel / Seed Deck Outline'],
+  procurement: ['SAM.gov UEI Status & Maintenance','NAICS Strategy Session','Capability Statement Builder','Set-Aside Eligibility (8a / WOSB / HUBZone)','Contract Vehicle Identification'],
+  caas:        ['Regulatory Obligation Mapping','Compliance Drift Report','Pre-Audit Readiness Package','Control Evidence Compilation','Compliance Calendar Update'],
+  gaas:        ['RACI Matrix Builder','RCSA Automation Setup','Policy Lifecycle Review','Vendor Risk Assessment (TPRM)','Governance Health Dashboard'],
+};
+
+const DEMO_OUTPUTS = {
+  docs:`OPERATING AGREEMENT
+Kintsugi Consulting & Logistics LLC
+EIN: 42-2286831 | Ohio Single-Member LLC | Effective: July 2026
+
+ARTICLE I — ORGANIZATION
+1.1 Name: Kintsugi Consulting & Logistics LLC
+1.2 Principal Office: 2693 Bridgewatch Lane, Hilliard, Ohio 43026
+1.3 Registered Agent: Shiloh Shaeed El, at the above address.
+
+[HITL CHECKPOINT #1] — Verify legal name, address, and registered agent before execution.
+
+ARTICLE II — MEMBER
+2.1 Sole Member: Shiloh Shaeed El holds 100% membership interest.
+2.2 Capital Contribution: As agreed and documented in the Evidence Vault.
+2.3 Titles: Founder & Principal Consultant.
+
+[HITL CHECKPOINT #2] — Confirm capital contribution and member authority scope.
+
+ARTICLE III — MANAGEMENT
+3.1 Member-Managed. All decisions documented in Evidence Vault per Integrity Gate protocol.
+3.2 AI Governance: All AI-assisted outputs subject to HITL review before execution.
+
+ARTICLE IV — DISTRIBUTIONS
+4.1 At Member's discretion, subject to Operational Risk Reserve (ORR) requirements.
+
+[HITL CHECKPOINT #3] — Review ORR allocation with Principal Initiator before execution.
+
+STATUS: DRAFT — Requires Principal Initiator HITL approval before legal execution.`,
+
+  tax:`QUARTERLY TAX STRATEGY
+Kintsugi Consulting & Logistics LLC | EIN: 42-2286831
+Q3 2026 Plan (July – September 2026)
+
+ENTITY CLASSIFICATION
+• Type: Single-Member LLC (disregarded entity for federal tax)
+• Federal Treatment: Schedule C / Form 1040
+• Ohio: CAT (Commercial Activity Tax) — threshold monitoring required
+
+[HITL CHECKPOINT #1] — Verify entity classification with qualified tax counsel.
+
+ESTIMATED QUARTERLY PAYMENT (EQ)
+• Self-Employment Tax: 15.3% on net self-employment income
+• Federal Income Bracket: 22–24% (projected)
+• Recommended EQ Payment: 25–28% of quarterly net profit
+• Due Date: September 15, 2026
+
+OPERATIONAL RISK RESERVE (ORR)
+• Recommended Allocation: 15–20% of gross revenue
+• Purpose: Compliance contingencies, regulatory fees, professional services
+• Account: Dedicated ORR sub-account at Wright-Patt Credit Union
+
+[HITL CHECKPOINT #2] — Confirm ORR percentage before implementation.
+
+DBA STRUCTURE NOTE
+• DBA "Kintsugi Consulting" operates under the LLC
+• All income reports to EIN 42-2286831
+
+STATUS: DRAFT — Requires Managing Member HITL review before client delivery.`,
+
+  caas:`COMPLIANCE OBLIGATION MAPPING
+CaaS Report | Kintsugi Consulting & Logistics LLC
+Generated: ${new Date().toLocaleDateString()} | DRAFT — Pending HITL Review
+
+REGULATORY SCOPE ASSESSMENT
+NAICS 541611 — Administrative Management Consulting
+
+APPLICABLE FRAMEWORKS:
+1. BSA / Bank Secrecy Act (31 U.S.C. §5311)
+   AML monitoring obligations for financial consulting engagements
+   Status: MAPPED | Next review: Q4 2026
+
+[HITL CHECKPOINT #1] — Confirm BSA applicability scope with legal counsel.
+
+2. NIST SP 800-53 (Security & Privacy Controls)
+   Applied to client data handling and AI system oversight
+   Status: Framework adopted | Implementation: In progress
+
+3. Ohio LLC Statutes
+   • Articles of Organization: FILED ✓ (DOC ID 202612102958)
+   • Annual Report: Due May 2027
+
+COMPLIANCE DRIFT ALERTS:
+⚠ HIGH — NMSDC Certification Application: In Progress
+✓ CLEAR — SAM.gov UEI: Active and confirmed
+⚠ MED — Articles Amendment (purpose clause): Due this week
+✓ CLEAR — Business Bank Account: Active (Wright-Patt CU)
+
+[HITL CHECKPOINT #2] — Review all drift alerts before any client delivery.
+
+STATUS: DRAFT — Requires HITL review before distribution or filing.`,
+
+  gaas:`GOVERNANCE HEALTH DASHBOARD
+GaaS Report | Kintsugi Consulting & Logistics LLC
+Period: Q3 2026 | DRAFT — Pending HITL Review
+
+RACI MATRIX STATUS
+• Principal Initiator: Shiloh Shaeed El — ASSIGNED
+• Control Owners: TBD (pending team expansion)
+• Client Accountability: Per individual MSA scope
+
+[HITL CHECKPOINT #1] — Confirm RACI assignments before distribution.
+
+POLICY LIFECYCLE STATUS
+• Operating Agreement v3.0: EXECUTED ✓
+• Master Services Agreement Template: IN DEVELOPMENT
+• NDA Template: IN DEVELOPMENT
+• AI Governance Policy: IN DEVELOPMENT
+
+VENDOR / TPRM STATUS
+• AI Engine (Anthropic Claude): Risk-rated LOW — API only, no data retention
+• CRM / Platform Tools: Pending vendor intake assessment
+
+RCSA SUMMARY
+• Control Environment: ESTABLISHING
+• Key Risk: Platform access controls — IN PROGRESS
+• Integrity Gates: IMPLEMENTED (3 active gates)
+
+GOVERNANCE SCORE: 68/100 — On Track for Q4 target of 85+
+
+[HITL CHECKPOINT #2] — Review RCSA findings before board or client delivery.
+
+STATUS: DRAFT — Requires Principal Initiator HITL approval.`,
+};
+
+// ── SCREEN MANAGEMENT ─────────────────────────────────────────────────────────
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  S.screen=id;
+  if(id==='landing') initCanvas();
+}
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById('page-'+id);
+  if(pg){ pg.classList.add('active'); S.page=id; }
+  document.querySelectorAll('.sidebar-item').forEach(el=>el.classList.toggle('active',el.dataset.page===id));
+  document.querySelectorAll('.tab-item').forEach(el=>el.classList.toggle('active',el.dataset.page===id));
+  if(id==='clients') renderClients();
+  if(id==='hitl')    renderHITL();
+  if(id==='team')    renderTeam();
+  if(id==='vault')   renderVault();
+  if(id==='calendar')renderCalendar();
+}
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+function handleLogin(){
+  const email=document.getElementById('login-email').value.trim().toLowerCase();
+  const pass=document.getElementById('login-password').value;
+  if(!email){showToast('Please enter your email address.','error');return;}
+  if(!pass) {showToast('Please enter your password.','error');return;}
+  S.pendingUser = USERS[email] || {name:email.split('@')[0], role:'client', title:'Client'};
+  document.getElementById('login-step1').style.display='none';
+  document.getElementById('login-step2').style.display='block';
+  setTimeout(()=>document.getElementById('mfa0').focus(),80);
+}
+
+function mfaNav(idx){
+  const v=document.getElementById('mfa'+idx).value;
+  if(v&&idx<5)document.getElementById('mfa'+(idx+1)).focus();
+  // Auto-submit when last digit entered
+  if(idx===5&&v){setTimeout(verifyMFA,150);}
+}
+
+function verifyMFA(){
+  const code=[0,1,2,3,4,5].map(i=>document.getElementById('mfa'+i).value).join('');
+  if(code.length<6){showToast('Please enter all 6 digits.','error');return;}
+  showLoading('Verifying identity...');
+  setTimeout(()=>{
+    hideLoading();
+    S.user=S.pendingUser;
+    initApp();
+    showScreen('app');
+    showToast('Welcome, '+S.user.name.split(' ')[0]+'.','success');
+  },1000);
+}
+
+function guestDemo(){
+  S.user=USERS['guest@demo.com'];
+  initApp();
+  showScreen('app');
+  showToast('Demo session active. 2 hours remaining.','info');
+}
+
+function doLogout(){
+  if(!confirm('Sign out of Kintsugi DAE?'))return;
+  S.user=null;
+  document.getElementById('login-step1').style.display='block';
+  document.getElementById('login-step2').style.display='none';
+  document.getElementById('login-email').value='';
+  document.getElementById('login-password').value='';
+  [0,1,2,3,4,5].forEach(i=>document.getElementById('mfa'+i).value='');
+  showScreen('landing');
+}
+
+// ── APP INIT ──────────────────────────────────────────────────────────────────
+function initApp(){
+  const cfg=RC[S.user.role];
+  document.getElementById('nav-role-badge').textContent=cfg.label;
+  // Sidebar
+  document.getElementById('sidebar').innerHTML=cfg.sidebar.map(item=>
+    `<div class="sidebar-item" data-page="${item.p}" onclick="showPage('${item.p}')">
+      <span class="sidebar-icon">${item.i}</span>${item.l}
+    </div>`).join('');
+  // Tab bar
+  document.getElementById('tab-bar').innerHTML=cfg.tabs.map(item=>
+    `<button class="tab-item" data-page="${item.p}" onclick="showPage('${item.p}')">
+      <span class="tab-icon">${item.i}</span>${item.l}
+    </button>`).join('');
+  renderDashboard();
+  renderAllMods();
+  // Restore API key display
+  const ki=document.getElementById('api-key-input');
+  if(ki&&S.apiKey){ki.value=S.apiKey;updateApiStatus();}
+  const def=S.user.role==='guest'?'demo':'dashboard';
+  showPage(def);
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function renderDashboard(){
+  const cfg=RC[S.user.role];
+  // Greeting
+  const hr=new Date().getHours();
+  const greet=hr<12?'Good morning':'hr<17?Good afternoon':'Good evening';
+  document.getElementById('dash-greeting').innerHTML=
+    `${hr<12?'Good morning':hr<17?'Good afternoon':'Good evening'}, <span id="dash-name">${S.user.name.split(' ')[0]}</span>.`;
+  document.getElementById('dash-date').textContent=
+    new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  // Stats
+  document.getElementById('dash-stats').innerHTML=cfg.stats.map(st=>
+    `<div class="stat-card"><div class="stat-num"${st.id?` id="${st.id}"`:''}>${st.n}</div><div class="stat-label">${st.l}</div></div>`
+  ).join('');
+  updStats();
+  // HITL alert
+  const pending=S.hitlQ.filter(h=>h.status==='pending').length;
+  document.getElementById('hitl-alert-wrap').innerHTML=
+    (pending>0&&['principal','managing_member','admin'].includes(S.user.role))
+    ?`<div class="alert alert-hitl" style="margin-bottom:1rem;cursor:pointer;" onclick="showPage('hitl')">
+        ⚖️ <strong>${pending} output${pending>1?'s':''} awaiting HITL review</strong> — tap to review
+      </div>`:'';
+  // Modules
+  document.getElementById('dash-modules').innerHTML=cfg.mods.map(k=>
+    `<div class="module-card" onclick="openMod('${k}')">
+      <div class="module-icon">${MODS[k].icon}</div>
+      <div class="module-name">${MODS[k].name}</div>
+      <div class="module-desc">${MODS[k].desc}</div>
+    </div>`).join('');
+  // Activity
+  document.getElementById('recent-activity').innerHTML=[
+    {i:'📄',t:'Operating Agreement v3.0',s:'Document · Created',d:'Today'},
+    {i:'✅',t:'SAM.gov UEI Confirmed',s:'Procurement · Active',d:'Jul 15'},
+    {i:'📋',t:'Launch Day Checklist',s:'39 items · In progress',d:'Jul 15'},
+    {i:'🛡️',t:'BSA Scope Mapping',s:'CaaS · Complete',d:'Jul 14'},
+  ].map(a=>`
+    <div class="list-item">
+      <div class="list-avatar">${a.i}</div>
+      <div class="list-body"><div class="list-title">${a.t}</div><div class="list-sub">${a.s}</div></div>
+      <div class="list-meta">${a.d}</div>
+    </div>`).join('');
+}
+
+function updStats(){
+  const sc=document.getElementById('s-cli');
+  const sh=document.getElementById('s-hitl');
+  if(sc)sc.textContent=S.clients.length;
+  if(sh)sh.textContent=S.hitlQ.filter(x=>x.status==='pending').length;
+}
+
+// ── MODULES ───────────────────────────────────────────────────────────────────
+function renderAllMods(){
+  const cfg=RC[S.user.role];
+  document.getElementById('all-modules').innerHTML=Object.entries(MODS).map(([k,m])=>{
+    const locked=!cfg.mods.includes(k);
+    return `<div class="module-card${locked?' locked':''}" onclick="${locked?`showToast('Not in your current module scope. Contact your Administrator.','error')`:`openMod('${k}')`}">
+      <div class="module-icon">${m.icon}</div>
+      <div class="module-name">${m.name}${locked?' 🔒':''}</div>
+      <div class="module-desc">${m.desc}</div>
+    </div>`;
+  }).join('');
+}
+
+function openMod(k){
+  S.curModule=k;
+  showPage('workspace');
+  renderWorkspace(k);
+}
+
+function renderWorkspace(k){
+  const m=MODS[k];
+  const wfs=WORKFLOWS[k]||[];
+  document.getElementById('workspace-content').innerHTML=`
+    <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:1.1rem;">
+      <button class="btn-icon" onclick="showPage('modules')">&#8592;</button>
+      <div><p class="label" style="margin-bottom:0;">${m.icon} ${m.name}</p><p class="caption">${m.desc}</p></div>
+    </div>
+    <div class="gold-rule"></div>
+    <div class="tab-nav" id="ws-tabs">
+      <button class="tab-btn active" onclick="wsTab('wf',this)">Workflows</button>
+      <button class="tab-btn" onclick="wsTab('ai',this)">AI Generator</button>
+      <button class="tab-btn" onclick="wsTab('hist',this)">History</button>
+    </div>
+    <div class="tab-content active" id="ws-wf">
+      <p class="caption" style="margin-bottom:0.9rem;">Select a workflow to begin.</p>
+      <div style="display:flex;flex-direction:column;gap:0.55rem;">
+        ${wfs.map(wf=>`
+          <div class="card" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="loadWorkflow('${k}','${wf.replace(/'/g,'\\'')}')">
+            <div>
+              <div style="font-size:0.86rem;font-weight:500;color:var(--text);">${wf}</div>
+              <div class="caption" style="margin-top:0.12rem;">AI-assisted &middot; HITL-verified</div>
+            </div>
+            <span style="color:var(--gold);font-size:1.05rem;">&#8594;</span>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div class="tab-content" id="ws-ai">
+      <div class="form-group">
+        <label class="form-label">Describe what you need</label>
+        <textarea class="form-textarea" id="ai-prompt" placeholder="E.g.: Generate a complete Operating Agreement for a single-member Ohio LLC named Kintsugi Consulting &amp; Logistics LLC. EIN: 42-2286831. Sole member and Principal Consultant: Shiloh Shaeed El. Include all required articles per Ohio Revised Code." style="min-height:95px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Context / Scope</label>
+        <input class="form-input" id="ai-ctx" placeholder="Ohio LLC · EIN 42-2286831 · NAICS 541611 · Kintsugi Consulting">
+      </div>
+      <button class="btn btn-primary" onclick="genAI('${k}')" id="btn-gen">&#10022; Generate with AI</button>
+      <div style="height:0.9rem;"></div>
+      <div id="ai-out-wrap" style="display:none;">
+        <p class="label" style="margin-bottom:0.45rem;">AI Draft Output</p>
+        <div class="ai-output" id="ai-out"><span class="ai-label">DRAFT — Pending HITL Review</span></div>
+        <div style="margin-top:0.7rem;display:flex;gap:0.45rem;flex-wrap:wrap;">
+          <button class="btn btn-gold btn-sm" onclick="submitHITL('${k}')">Submit for HITL Review</button>
+          <button class="btn btn-sm" style="background:var(--surface2);color:var(--slate);" onclick="document.getElementById('ai-out-wrap').style.display='none'">Clear</button>
+        </div>
+      </div>
+    </div>
+    <div class="tab-content" id="ws-hist">
+      <div id="ws-hist-list"><p class="caption">No outputs generated yet in this session.</p></div>
+    </div>`;
+}
+
+function wsTab(tab,btn){
+  document.querySelectorAll('#ws-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  ['wf','ai','hist'].forEach(t=>{ const el=document.getElementById('ws-'+t); if(el)el.classList.toggle('active',t===tab); });
+}
+
+function loadWorkflow(k,wf){
+  // Switch to AI tab and pre-fill
+  const aiBtn=document.querySelectorAll('#ws-tabs .tab-btn')[1];
+  wsTab('ai',aiBtn);
+  document.getElementById('ai-prompt').value=
+    `Generate a complete, professional ${wf} document for Kintsugi Consulting & Logistics LLC. `+
+    `EIN: 42-2286831. Principal: Shiloh Shaeed El, Founder & Principal Consultant. `+
+    `Ohio LLC. NAICS: 541611. Include all required sections, relevant regulatory references, `+
+    `and mark HITL verification checkpoints clearly with [HITL CHECKPOINT].`;
+  showToast(wf+' loaded. Review prompt and click Generate.','info');
+}
+
+async function genAI(k){
+  const prompt=document.getElementById('ai-prompt').value.trim();
+  const ctx=document.getElementById('ai-ctx').value.trim();
+  if(!prompt){showToast('Please describe what you need.','error');return;}
+  const wrap=document.getElementById('ai-out-wrap');
+  const outEl=document.getElementById('ai-out');
+  wrap.style.display='block';
+  outEl.innerHTML='<span class="ai-label">DRAFT — Pending HITL Review</span><span class="typing-cursor"></span>';
+  const btn=document.getElementById('btn-gen');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Generating...';
+  if(S.apiKey){
+    try{
+      const sys=`You are the Kintsugi Discovery Application Engine — an institutional GRC and AI governance platform created by Kintsugi Consulting & Logistics LLC (EIN: 42-2286831, Principal: Shiloh Shaeed El, Founder & Principal Consultant, Columbus OH). You generate professional, compliance-ready ${MODS[k]?.name||'business'} documents for clients. Every output is a DRAFT requiring Human-in-the-Loop (HITL) verification before finalization. Mark HITL checkpoints with [HITL CHECKPOINT #N]. Context: ${ctx||'Kintsugi Consulting & Logistics LLC · Ohio · NAICS 541611'}. Produce structured, thorough, compliance-aware output with section headers.`;
+      const resp=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:sys,messages:[{role:'user',content:prompt}]}),
+      });
+      const data=await resp.json();
+      btn.disabled=false; btn.innerHTML='&#10022; Generate with AI';
+      if(data.content&&data.content[0]){
+        S.lastAIOut=data.content[0].text;
+        outEl.innerHTML='<span class="ai-label">DRAFT — Pending HITL Review</span>\n'+S.lastAIOut;
+      } else { throw new Error(data.error?.message||'No response from API'); }
+    }catch(e){
+      btn.disabled=false; btn.innerHTML='&#10022; Generate with AI';
+      showToast('API error: '+e.message+' — showing demo output.','error');
+      streamDemo(k,outEl);
+    }
+  } else {
+    btn.disabled=false; btn.innerHTML='&#10022; Generate with AI';
+    showToast('No API key — showing demo output. Add key in Settings.','info');
+    streamDemo(k,outEl);
+  }
+}
+
+function streamDemo(k,el){
+  const text=DEMO_OUTPUTS[k]||`KINTSUGI DAE — AI OUTPUT\n\n[Module: ${MODS[k]?.name}]\n\n[HITL CHECKPOINT #1] — Review this output before use.\n\nThis is a demonstration output. Add your Claude API key in Settings to enable live AI generation.\n\nSTATUS: DRAFT — Requires HITL review.`;
+  S.lastAIOut=text;
+  let i=0; const spd=10;
+  function type(){
+    if(i<text.length){
+      el.innerHTML='<span class="ai-label">DRAFT — Pending HITL Review</span>'+text.slice(0,i+1)+'<span class="typing-cursor"></span>';
+      i+=spd; setTimeout(type,14);
+    } else { el.innerHTML='<span class="ai-label">DRAFT — Pending HITL Review</span>\n'+text; }
+  }
+  type();
+}
+
+function submitHITL(k){
+  const out=S.lastAIOut||document.getElementById('ai-out').innerText;
+  if(!out){showToast('No output to submit.','error');return;}
+  const item={id:'h'+Date.now(),module:k,moduleName:MODS[k]?.name,
+    title:`${MODS[k]?.icon} ${MODS[k]?.name} — AI Draft`,
+    output:out,status:'pending',
+    submittedAt:new Date().toISOString(),submittedBy:S.user.name};
+  S.hitlQ.push(item);
+  localStorage.setItem('kae_hitl',JSON.stringify(S.hitlQ));
+  updStats();
+  document.getElementById('ai-out-wrap').style.display='none';
+  showToast('Submitted to HITL Queue. Awaiting review.','success');
+  // Update HITL alert on dashboard
+  const pending=S.hitlQ.filter(h=>h.status==='pending').length;
+  const hw=document.getElementById('hitl-alert-wrap');
+  if(hw&&pending>0&&['principal','managing_member','admin'].includes(S.user.role)){
+    hw.innerHTML=`<div class="alert alert-hitl" style="margin-bottom:1rem;cursor:pointer;" onclick="showPage('hitl')">⚖️ <strong>${pending} output${pending>1?'s':''} awaiting HITL review</strong> — tap to review</div>`;
+  }
+}
+
+// ── HITL ──────────────────────────────────────────────────────────────────────
+function renderHITL(){
+  const el=document.getElementById('hitl-queue-list');
+  const pending=S.hitlQ.filter(h=>h.status==='pending');
+  const done=S.hitlQ.filter(h=>h.status!=='pending');
+  if(S.hitlQ.length===0){el.innerHTML='<div class="alert alert-success">&#10003; HITL queue is clear. No outputs pending review.</div>';return;}
+  el.innerHTML=
+    (pending.length?`<p class="label" style="margin-bottom:0.7rem;color:var(--purple);">Pending Review (${pending.length})</p>`:'') +
+    pending.map(h=>`
+      <div class="hitl-item">
+        <div class="hitl-header">
+          <div><div class="hitl-title">${h.title}</div><div class="hitl-meta">Submitted by ${h.submittedBy} &middot; ${new Date(h.submittedAt).toLocaleString()}</div></div>
+          <span class="badge badge-hitl">Pending</span>
+        </div>
+        <div class="hitl-actions"><button class="btn-approve" onclick="openHITLModal('${h.id}')">Review &#8594;</button></div>
+      </div>`).join('') +
+    (done.length?`<div class="rule"></div><p class="label" style="margin-bottom:0.7rem;">Reviewed (${done.length})</p>`:'') +
+    done.map(h=>`
+      <div class="hitl-item" style="opacity:0.55;">
+        <div class="hitl-header">
+          <div><div class="hitl-title">${h.title}</div><div class="hitl-meta">${(h.decision||'').toUpperCase()} &middot; ${new Date(h.reviewedAt||h.submittedAt).toLocaleString()}</div></div>
+          <span class="badge ${h.decision==='approve'?'badge-approved':h.decision==='reject'?'badge-warn':'badge-draft'}">${h.decision||'—'}</span>
+        </div>
+      </div>`).join('');
+}
+
+function openHITLModal(id){
+  const item=S.hitlQ.find(h=>h.id===id);
+  if(!item)return;
+  S.curHITL=item;
+  document.getElementById('hitl-modal-badge').textContent=item.moduleName+' — Pending Review';
+  document.getElementById('hitl-modal-output').textContent=item.output;
+  document.getElementById('hitl-notes').value='';
+  openModal('modal-hitl');
+}
+
+function hitlDecision(dec){
+  const item=S.curHITL; if(!item)return;
+  item.status='reviewed'; item.decision=dec;
+  item.notes=document.getElementById('hitl-notes').value;
+  item.reviewedBy=S.user.name; item.reviewedAt=new Date().toISOString();
+  localStorage.setItem('kae_hitl',JSON.stringify(S.hitlQ));
+  closeModal('modal-hitl'); updStats();
+  const msgs={approve:'Output approved and ready for delivery.',revise:'Output returned for revision.',reject:'Output rejected and flagged for re-initiation.'};
+  showToast(msgs[dec],dec==='approve'?'success':'error');
+  renderHITL();
+  if(dec==='approve'){
+    S.vault.push({id:'v'+Date.now(),name:item.title,type:'Approved Output',date:new Date().toISOString(),status:'approved',content:item.output});
+    localStorage.setItem('kae_vault',JSON.stringify(S.vault));
+  }
+}
+
+// ── CLIENTS ───────────────────────────────────────────────────────────────────
+function renderClients(){
+  const el=document.getElementById('client-list');
+  if(S.clients.length===0){el.innerHTML='<div class="alert alert-info">No active engagements. Click "+ New Client" to onboard your first client.</div>';return;}
+  el.innerHTML=S.clients.map(c=>`
+    <div class="list-item">
+      <div class="list-avatar">🏢</div>
+      <div class="list-body">
+        <div class="list-title">${c.name}</div>
+        <div class="list-sub">${c.contact} &middot; ${c.entity} &middot; ${c.state}</div>
+      </div>
+      <div class="list-meta"><span class="badge badge-active">Active</span></div>
+    </div>`).join('');
+}
+
+function createClient(){
+  const name=document.getElementById('nc-name').value.trim();
+  const contact=document.getElementById('nc-contact').value.trim();
+  const email=document.getElementById('nc-email').value.trim();
+  if(!name||!contact||!email){showToast('Please fill in all required fields.','error');return;}
+  const client={id:'c'+Date.now(),name,contact,email,
+    phone:document.getElementById('nc-phone').value,
+    entity:document.getElementById('nc-entity').value,
+    state:document.getElementById('nc-state').value,
+    modules:['docs','tax','funding','procurement','caas','gaas'].filter(m=>document.getElementById('scope-'+m)?.checked),
+    createdAt:new Date().toISOString()};
+  S.clients.push(client);
+  localStorage.setItem('kae_clients',JSON.stringify(S.clients));
+  updStats(); closeModal('modal-new-client'); renderClients();
+  showToast(`Engagement created for ${name}. Invitation sent to ${email}.`,'success');
+}
+
+// ── TEAM ──────────────────────────────────────────────────────────────────────
+function renderTeam(){
+  const base=[{name:'Shiloh Shaeed El',role:'Principal Initiator',email:'shiloh@kintsugi-logistics.com'},...S.team];
+  document.getElementById('team-list').innerHTML=base.map(m=>`
+    <div class="list-item">
+      <div class="list-avatar">👤</div>
+      <div class="list-body"><div class="list-title">${m.name}</div><div class="list-sub">${m.role} &middot; ${m.email}</div></div>
+      <div class="list-meta"><span class="badge badge-active">MFA &#10003;</span></div>
+    </div>`).join('');
+}
+
+function addMember(){
+  const name=document.getElementById('am-name').value.trim();
+  const email=document.getElementById('am-email').value.trim();
+  const roleVal=document.getElementById('am-role').value;
+  if(!name||!email){showToast('Name and email are required.','error');return;}
+  const rl={managing_member:'Managing Member',admin:'Administrator',client:'Client',guest:'Guest (Demo)'};
+  S.team.push({name,email,role:rl[roleVal],createdAt:new Date().toISOString()});
+  localStorage.setItem('kae_team',JSON.stringify(S.team));
+  closeModal('modal-add-member'); renderTeam();
+  showToast(`Invitation sent to ${name} at ${email}.`,'success');
+}
+
+// ── VAULT ─────────────────────────────────────────────────────────────────────
+function renderVault(){
+  const approved=S.vault.filter(v=>v.status==='approved');
+  const stdDocs=[
+    {i:'📋',n:'Operating Agreement v3.0',m:'Executed · July 2026',s:'approved'},
+    {i:'🏛️',n:'Ohio Articles of Organization',m:'DOC ID 202612102958',s:'approved'},
+    {i:'📄',n:'IRS CP575 EIN Confirmation',m:'EIN 42-2286831',s:'approved'},
+    {i:'🏦',n:'Wright-Patt Bank Statement',m:'LLC Account · Active',s:'approved'},
+    {i:'🪪',n:'SAM.gov UEI Registration',m:'Active · Confirmed',s:'approved'},
+    ...approved.map(v=>({i:'✅',n:v.name,m:new Date(v.date).toLocaleDateString(),s:'approved'})),
+  ];
+  document.getElementById('vault-docs').innerHTML=stdDocs.map(d=>`
+    <div class="vault-item">
+      <span class="vault-icon">${d.i}</span>
+      <div><div class="vault-name">${d.n}</div><div class="vault-meta">${d.m}</div></div>
+      <div class="vault-status"><span class="badge badge-approved">&#10003;</span></div>
+    </div>`).join('');
+  document.getElementById('vault-gov').innerHTML=[
+    {i:'⚙️',n:'Master GRC Framework v5',m:'MasterDeck_v5.pptx',s:'approved'},
+    {i:'📖',n:'User Access & Operations Manual v1',m:'DAE_User_Manual_v1.docx',s:'approved'},
+    {i:'📊',n:'Launch Day Checklist',m:'39 items · In progress',s:'draft'},
+    {i:'🗺️',n:'Build & Deployment Roadmap v1',m:'DAE_Build_Roadmap_v1.docx',s:'approved'},
+  ].map(d=>`
+    <div class="vault-item">
+      <span class="vault-icon">${d.i}</span>
+      <div><div class="vault-name">${d.n}</div><div class="vault-meta">${d.m}</div></div>
+      <div class="vault-status"><span class="badge ${d.s==='approved'?'badge-approved':'badge-draft'}">${d.s==='approved'?'&#10003;':'Draft'}</span></div>
+    </div>`).join('');
+  document.getElementById('vault-client').innerHTML=S.clients.length===0
+    ?'<p class="caption" style="padding:0.5rem 0;">No client files yet. Files are organized here by engagement after onboarding.</p>'
+    :S.clients.map(c=>`
+      <div class="vault-item">
+        <span class="vault-icon">🏢</span>
+        <div><div class="vault-name">${c.name}</div><div class="vault-meta">Vault created &middot; ${new Date(c.createdAt).toLocaleDateString()}</div></div>
+        <div class="vault-status"><span class="badge badge-active">Active</span></div>
+      </div>`).join('');
+}
+
+function switchVaultTab(tab,btn){
+  document.querySelectorAll('#vault-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  ['docs','gov','client'].forEach(t=>{
+    const el=document.getElementById('vault-'+t); if(el)el.classList.toggle('active',t===tab);
+  });
+}
+
+function handleVaultUpload(input){
+  if(!input.files.length)return;
+  const f=input.files[0];
+  S.vault.push({id:'v'+Date.now(),name:f.name,type:'Uploaded',date:new Date().toISOString(),status:'pending'});
+  localStorage.setItem('kae_vault',JSON.stringify(S.vault));
+  renderVault(); showToast(f.name+' uploaded to Evidence Vault.','success');
+}
+
+// ── CALENDAR ──────────────────────────────────────────────────────────────────
+function renderCalendar(){
+  const items=[
+    {day:'18',mo:'Jul',t:'NMSDC Hub Application — Submit',s:'Procurement · HIGH',d:'high'},
+    {day:'25',mo:'Jul',t:'Articles Amendment — Purpose Clause',s:'Legal · Ohio SOS · $50 fee',d:'high'},
+    {day:'31',mo:'Jul',t:'Q2 Federal Tax Review',s:'Tax Strategy · EQ Payment due',d:'med'},
+    {day:'05',mo:'Aug',t:'Ohio Employment Attorney Consultation',s:'HR · RIF Letter Review',d:'med'},
+    {day:'15',mo:'Aug',t:'Quarterly Access Review — DAE',s:'Governance · Integrity Gate checkpoint',d:'med'},
+    {day:'01',mo:'Sep',t:'Q3 Estimated Tax Payment (EQ)',s:'IRS · Form 1040-ES',d:'high'},
+    {day:'15',mo:'Sep',t:'SAM.gov Annual Renewal Check',s:'Procurement · UEI Maintenance',d:'low'},
+    {day:'01',mo:'Oct',t:'User Manual Quarterly Review',s:'Governance · DAE v1.0 · Next Review Due',d:'low'},
+  ];
+  document.getElementById('cal-list').innerHTML=items.map(i=>`
+    <div class="cal-item">
+      <div class="cal-date"><div class="cal-day">${i.day}</div><div class="cal-month">${i.mo}</div></div>
+      <div class="cal-body"><div class="cal-title">${i.t}</div><div class="cal-type">${i.s}</div></div>
+      <div class="cal-dot dot-${i.d}"></div>
+    </div>`).join('');
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────────────────
+function saveApiKey(){
+  const key=document.getElementById('api-key-input').value.trim();
+  if(!key.startsWith('sk-ant')){showToast('Please enter a valid Anthropic API key (starts with sk-ant-).','error');return;}
+  S.apiKey=key; localStorage.setItem('kae_api_key',key);
+  showToast('API key saved. Live AI generation is now active.','success');
+  updateApiStatus();
+}
+function updateApiStatus(){
+  const el=document.getElementById('api-key-status');
+  if(el&&S.apiKey)el.innerHTML='<span class="badge badge-approved">&#10003; API Key Active — Live AI enabled</span>';
+}
+
+// ── NOTIFICATIONS ─────────────────────────────────────────────────────────────
+function notifClick(){
+  const p=S.hitlQ.filter(h=>h.status==='pending').length;
+  showToast(p>0?p+' item'+(p>1?'s':'')+' pending HITL review. Tap HITL in the menu.':'No pending notifications.', p>0?'info':'success');
+}
+
+// ── MODALS ────────────────────────────────────────────────────────────────────
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function showToast(msg,type='info'){
+  const tc=document.getElementById('toasts');
+  const t=document.createElement('div');
+  t.className='toast toast-'+type; t.textContent=msg; tc.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.3s';setTimeout(()=>t.remove(),300);},3400);
+}
+
+// ── LOADING ───────────────────────────────────────────────────────────────────
+function showLoading(msg='Processing...'){document.getElementById('loading-msg').textContent=msg;document.getElementById('loading').style.display='flex';}
+function hideLoading(){document.getElementById('loading').style.display='none';}
+
+// ── KINTSUGI CRACK CANVAS ─────────────────────────────────────────────────────
+function initCanvas(){
+  const canvas=document.getElementById('hero-canvas');
+  if(!canvas||canvas._init)return; canvas._init=true;
+  const ctx=canvas.getContext('2d');
+  let W,H,cracks=[];
+  function resize(){W=canvas.width=canvas.parentElement.offsetWidth;H=canvas.height=canvas.parentElement.offsetHeight;}
+  resize(); window.addEventListener('resize',resize);
+  function mkCrack(){
+    const sx=W*0.08+Math.random()*W*0.84,sy=H*0.08+Math.random()*H*0.84;
+    const pts=[{x:sx,y:sy}];let x=sx,y=sy;
+    for(let i=0;i<4+Math.floor(Math.random()*6);i++){const a=Math.random()*Math.PI*2,l=18+Math.random()*85;x+=Math.cos(a)*l;y+=Math.sin(a)*l;pts.push({x,y});}
+    return{pts,p:0,gp:0,op:0,w:0.3+Math.random()*1.1};
+  }
+  for(let i=0;i<9;i++)cracks.push(mkCrack());
+  let last=0;
+  function frame(ts){
+    const dt=Math.min((ts-last)/1000,0.05);last=ts;
+    ctx.clearRect(0,0,W,H);
+    cracks.forEach(c=>{
+      c.op=Math.min(c.op+dt*0.2,0.25);c.p=Math.min(c.p+dt*0.17,1);
+      if(c.p>0.28)c.gp=Math.min(c.gp+dt*0.13,1);
+      const n=Math.floor(c.pts.length*c.p);
+      if(n>0){ctx.save();ctx.globalAlpha=c.op;ctx.strokeStyle='rgba(245,240,232,0.35)';ctx.lineWidth=c.w;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(c.pts[0].x,c.pts[0].y);for(let i=1;i<=n&&i<c.pts.length;i++)ctx.lineTo(c.pts[i].x,c.pts[i].y);ctx.stroke();ctx.restore();}
+      if(c.gp>0){const gn=Math.floor(c.pts.length*c.gp);ctx.save();ctx.globalAlpha=c.gp*0.58;ctx.strokeStyle='#C9A84C';ctx.lineWidth=c.w*0.48;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(c.pts[0].x,c.pts[0].y);for(let i=1;i<=gn&&i<c.pts.length;i++)ctx.lineTo(c.pts[i].x,c.pts[i].y);ctx.stroke();ctx.restore();}
+    });
+    if(cracks.every(c=>c.gp>=1)&&Math.random()<0.004){cracks.push(mkCrack());if(cracks.length>15)cracks.shift();}
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// ── PWA MANIFEST ──────────────────────────────────────────────────────────────
+(function(){
+  const m={name:'Kintsugi Discovery Application Engine',short_name:'Kintsugi DAE',
+    description:'Institutional GRC · AI Governance · Compliance-as-a-Service',
+    start_url:'./',display:'standalone',background_color:'#0E0E0E',theme_color:'#1F5F5B',
+    icons:[{src:"data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="38" fill="#1F5F5B"/><text x="96" y="138" font-size="110" text-anchor="middle" fill="#C9A84C">⚙</text></svg>'),sizes:'192x192',type:'image/svg+xml'}]};
+  const blob=new Blob([JSON.stringify(m)],{type:'application/json'});
+  const link=document.createElement('link');link.rel='manifest';link.href=URL.createObjectURL(blob);document.head.appendChild(link);
+})();
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  initCanvas();
+  const ki=document.getElementById('api-key-input');
+  if(ki&&S.apiKey){ki.value=S.apiKey;updateApiStatus();}
+  const dd=document.getElementById('dash-date');
+  if(dd)dd.textContent=new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+});
+
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  setTimeout(()=>showToast('&#128241; Install Kintsugi DAE: tap browser menu → Add to Home Screen','info'),3500);
+});
+
+console.log('%cKintsugi DAE — v1.0','color:#C9A84C;font-weight:bold;font-size:14px;');
+console.log('%cDemo logins (any password):\n  Principal: shiloh@kintsugi-logistics.com\n  Admin: admin@kintsugi-logistics.com\n  Client: client@example.com\n  Guest: click "Request Demo" button','color:#4A9E95;font-size:12px;');
+</script>
+</body>
+</html>
